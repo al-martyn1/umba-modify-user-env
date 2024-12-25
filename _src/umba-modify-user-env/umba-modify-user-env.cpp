@@ -198,5 +198,20 @@ int unsafeMain(int argc, char* argv[])
 
 
 
+    // https://learn.microsoft.com/ru-ru/windows/win32/procthread/environment-variables
+    // https://learn.microsoft.com/en-us/windows/win32/procthread/environment-variables
+    // To programmatically add or modify system environment variables, add them to the 
+    // HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment registry key, 
+    // then broadcast a WM_SETTINGCHANGE message with lParam set to the string "Environment".
+
+    // WM_SETTINGCHANGE - https://stackoverflow.com/questions/48928002/setting-global-environment-variables-programmatically
+
+    // User Variables   - HKEY_CURRENT_USER\Environment
+    // System Variables - HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
+    // User path variables (My Documents, AppData, etc) - HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders 
+
+
+
+
     return 0;
 }
