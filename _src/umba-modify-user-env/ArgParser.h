@@ -240,6 +240,152 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("NAME[:VALUE]")
+               || opt.isOption("add-var") || opt.isOption("add") || opt.isOption('a')
+               || opt.setDescription("Command. Add new environment variable. Fails if variable already exist."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR<<errMsg<<"\n";
+                return -1;
+            }
+
+            if (!appConfig.startNewCommand(Command::addVar, strVal))
+            {
+                LOG_ERR<<"Failed to add command to pipeline (--add-var)"<<"\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.setParam("NAME[:VALUE]")
+               || opt.isOption("update-var") || opt.isOption("update") || opt.isOption('u')
+               || opt.setDescription("Command. Update environment variable. Fails if variable is not exist."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR<<errMsg<<"\n";
+                return -1;
+            }
+
+            if (!appConfig.startNewCommand(Command::updateVar, strVal))
+            {
+                LOG_ERR<<"Failed to add command to pipeline (--update-var)"<<"\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.setParam("NAME[:VALUE]")
+               || opt.isOption("set-var") || opt.isOption("set") || opt.isOption('s')
+               || opt.setDescription("Command. Set environment variable (add or update)."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR<<errMsg<<"\n";
+                return -1;
+            }
+
+            if (!appConfig.startNewCommand(Command::setVar, strVal))
+            {
+                LOG_ERR<<"Failed to add command to pipeline (--set-var)"<<"\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.setParam("?PATH", std::string())
+               || opt.isOption("path-add") || opt.isOption('p')
+               || opt.setDescription("Command. Add `PATH` value to `Path` environment variable."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR<<errMsg<<"\n";
+                return -1;
+            }
+
+            if (!appConfig.startNewCommand(Command::pathAdd))
+            {
+                LOG_ERR<<"Failed to add command to pipeline (--path-add)"<<"\n";
+                return -1;
+            }
+
+            if (!strVal.empty())
+            {
+                if (!appConfig.setValue(strVal))
+                {
+                    LOG_ERR<<"Failed to set path value for `path` command (--path-add)"<<"\n";
+                    return -1;
+                }
+            }
+
+            return 0;
+        }
+
+        else if ( opt.setParam("?PATH", std::string())
+               || opt.isOption("path-remove") || opt.isOption('r')
+               || opt.setDescription("Command. Remove `PATH` value from `Path` environment variable."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR<<errMsg<<"\n";
+                return -1;
+            }
+
+            if (!appConfig.startNewCommand(Command::pathRemove))
+            {
+                LOG_ERR<<"Failed to add command to pipeline (--path-remove)"<<"\n";
+                return -1;
+            }
+
+            if (!strVal.empty())
+            {
+                if (!appConfig.setValue(strVal))
+                {
+                    LOG_ERR<<"Failed to set path value for `path` command (--path-remove)"<<"\n";
+                    return -1;
+                }
+            }
+
+            return 0;
+        }
+
+        else if ( opt.setParam("?NAME", std::string())
+               || opt.isOption("make-self-alias") || opt.isOption("make-alias") || opt.isOption('A') 
+               || opt.setDescription("Command. Creates an alias for this utility. Parameter value is optional, in this case name 'umue' will be used."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!appConfig.startNewCommand(Command::makeAlias))
+            {
+                LOG_ERR<<"Failed to add command to pipeline (--make-self-alias)"<<"\n";
+                return -1;
+            }
+
+            if (opt.hasArg())
+               appConfig.curCommand.path =opt.optArg;
+            // else
+            //    appConfig.aliasName = "umue";
+
+            return 0;
+        }
+
+
+
+
         #if 0
         else if ( opt.setParam("?MODE",true)
                || opt.isOption("verbose")

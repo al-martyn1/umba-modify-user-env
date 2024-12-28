@@ -189,6 +189,9 @@ int unsafeMain(int argc, char* argv[])
     //     return -1;
     // }
 
+    appConfig.finalizeCommands();
+
+
     if (!argsParser.quet  /* && !hasHelpOption */ )
     {
         //printNameVersion();
@@ -196,6 +199,47 @@ int unsafeMain(int argc, char* argv[])
         umba::cli_tool_helpers::printNameVersion(umbaLogStreamMsg);
     }
 
+
+    if (appConfig.commands.empty())
+    {
+        LOG_ERR<<"No commands taken, nothing to do."<<"\n";
+    }
+
+
+    for(auto c : appConfig.commands)
+    {
+        if (c.cmd==Command::addVar)
+        {
+
+//#if defined(WIN32) || defined(_WIN32)
+        }
+
+        else if (c.cmd==Command::updateVar)
+        {
+        }
+
+        else if (c.cmd==Command::setVar)
+        {
+        }
+
+        else if (c.cmd==Command::pathAdd)
+        {
+        }
+
+        else if (c.cmd==Command::pathRemove)
+        {
+        }
+
+        else if (c.cmd==Command::listEnv)
+        {
+        }
+
+        else if (c.cmd==Command::makeAlias)
+        {
+        }
+
+
+    } // for(auto c : appConfig.commands)
 
 
     // https://learn.microsoft.com/ru-ru/windows/win32/procthread/environment-variables
@@ -209,6 +253,11 @@ int unsafeMain(int argc, char* argv[])
     // User Variables   - HKEY_CURRENT_USER\Environment
     // System Variables - HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
     // User path variables (My Documents, AppData, etc) - HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders 
+
+    // https://learn.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regsetvalueexa
+    // https://learn.microsoft.com/en-us/windows/win32/sysinfo/registry-element-size-limits
+    // https://learn.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regqueryvalueexw
+    // https://learn.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-reggetvaluea
 
 
 

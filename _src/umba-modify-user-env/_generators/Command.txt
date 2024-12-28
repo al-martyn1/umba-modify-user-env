@@ -1,0 +1,9 @@
+invalid,unknown    = -1
+none               = 0
+addVar
+updateVar
+setVar
+pathAdd
+pathRemove
+listEnv
+makeAlias
