@@ -6,4 +6,6 @@ setVar
 pathAdd
 pathRemove
 listEnv
+open
+regOpen,openReg
 makeAlias

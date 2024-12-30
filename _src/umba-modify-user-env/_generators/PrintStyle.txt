@@ -1,0 +1,4 @@
+invalid,unknown    = -1
+normal,regular     = 0
+pathList,list
+commaList

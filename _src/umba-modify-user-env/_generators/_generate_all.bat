@@ -35,6 +35,7 @@
 
 umba-enum-gen %GEN_OPTS% %HEX2% %TPL_OVERRIDE% %SNIPPETOPTIONS_GEN_FLAGS%   ^
     %UINT32% %HEX4% -E=Command                -F=@Command.txt               ^
+    %UINT32% %HEX4% -E=PrintStyle             -F=@PrintStyle.txt            ^
 ..\enums.h
 
 @rem Что-то пошло не так и файл генерится в текущий каталог

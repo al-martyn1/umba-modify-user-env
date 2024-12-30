@@ -240,7 +240,157 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
-        else if ( opt.setParam("NAME[:VALUE]")
+        else if ( opt.setParam("?MODE",true)
+               || opt.isOption("expand-sz") || opt.isOption("expand") || opt.isOption('E')
+               || opt.setDescription("Option. Set the type of vars to REG_SZ (false) or to REG_EXPAND_SZ (true)."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(boolVal,errMsg))
+            {
+                LOG_ERR<<errMsg<<"\n";
+                return -1;
+            }
+
+            if (!appConfig.setExpandSz(boolVal))
+            {
+                LOG_ERR<<errMsg<<"Option cannot be applied to current command (--expand-sz)\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.isOption("no-expand-sz") || opt.isOption("no-expand") || opt.isOption('N')
+               // || opt.setParam("VAL",true)
+               || opt.setDescription("Option. Set the type of vars to REG_SZ."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!appConfig.setExpandSz(false))
+            {
+                LOG_ERR<<errMsg<<"Option cannot be applied to current command (--no-expand-sz)\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.setParam("?MODE",true)
+               || opt.isOption("replace-sz") || opt.isOption('Z')
+               || opt.setDescription("Option. Replace var type for existing vars if true taken. For new vars used value taken by `--expand-sz` option"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(boolVal,errMsg))
+            {
+                LOG_ERR<<errMsg<<"\n";
+                return -1;
+            }
+
+            if (!appConfig.setReplaceSz(boolVal))
+            {
+                LOG_ERR<<errMsg<<"Option cannot be applied to current command (--replace-sz)\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.isOption("no-replace-sz") || opt.isOption('R')
+               // || opt.setParam("VAL",true)
+               || opt.setDescription("Option. Keep var type untouched for existing vars."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!appConfig.setReplaceSz(false))
+            {
+                LOG_ERR<<errMsg<<"Option cannot be applied to current command (--no-replace-sz)\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.setParam("?MODE",true)
+               || opt.isOption("path-prepend") || opt.isOption('A')
+               || opt.setDescription("Option. Set prepend mode to add paths to `PATH` environment variable"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(boolVal,errMsg))
+            {
+                LOG_ERR<<errMsg<<"\n";
+                return -1;
+            }
+
+            if (!appConfig.setPathPrepend(boolVal))
+            {
+                LOG_ERR<<errMsg<<"Option cannot be applied to current command (--path-prepend)\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.isOption("no-path-prepend") || opt.isOption("path-append") || opt.isOption('A')
+               // || opt.setParam("VAL",true)
+               || opt.setDescription("Option. Set path append mode."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!appConfig.setPathPrepend(false))
+            {
+                LOG_ERR<<errMsg<<"Option cannot be applied to current command (--no-path-prepend)\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.setParam("STYLE:NAME[,NAME]", umba::command_line::OptionType::optString)
+               || opt.isOption("print-style") || opt.isOption("print") || opt.isOption('P')
+               || opt.setDescription("Option. Set print style `STYLE` for variable(s) `NAME`. Applies to `--list-vars` command output."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR<<errMsg<<"\n";
+                return -1;
+            }
+
+            if (!appConfig.setPrintStyle(strVal))
+            {
+                LOG_ERR<<"Failed to set prints stype (--print-style)"<<"\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.setParam("NAME", umba::command_line::OptionType::optString)
+               || opt.isOption("restrict-var") || opt.isOption("restrict") || opt.isOption('T')
+               || opt.setDescription("Option. Restrict variable `NAME` from modification."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR<<errMsg<<"\n";
+                return -1;
+            }
+
+            if (!appConfig.addRestrictVar(strVal))
+            {
+                LOG_ERR<<"Failed to add restrict var (--restrict-var)"<<"\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.setParam("NAME[:VALUE]", umba::command_line::OptionType::optString)
                || opt.isOption("add-var") || opt.isOption("add") || opt.isOption('a')
                || opt.setDescription("Command. Add new environment variable. Fails if variable already exist."))
         {
@@ -261,7 +411,7 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
-        else if ( opt.setParam("NAME[:VALUE]")
+        else if ( opt.setParam("NAME[:VALUE]", umba::command_line::OptionType::optString)
                || opt.isOption("update-var") || opt.isOption("update") || opt.isOption('u')
                || opt.setDescription("Command. Update environment variable. Fails if variable is not exist."))
         {
@@ -282,7 +432,7 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
-        else if ( opt.setParam("NAME[:VALUE]")
+        else if ( opt.setParam("NAME[:VALUE]", umba::command_line::OptionType::optString)
                || opt.isOption("set-var") || opt.isOption("set") || opt.isOption('s')
                || opt.setDescription("Command. Set environment variable (add or update)."))
         {
@@ -297,6 +447,20 @@ int operator()( const StringType                                &a           //!
             if (!appConfig.startNewCommand(Command::setVar, strVal))
             {
                 LOG_ERR<<"Failed to add command to pipeline (--set-var)"<<"\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.isOption("list-vars") || opt.isOption("list") || opt.isOption('l')
+               || opt.setDescription("Command. List user environment variables."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!appConfig.startNewCommand(Command::listEnv))
+            {
+                LOG_ERR<<"Failed to add command to pipeline (--list-vars)"<<"\n";
                 return -1;
             }
 
@@ -363,6 +527,34 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+        else if ( opt.isOption("open") || opt.isOption('o')
+               || opt.setDescription("Command. Opens shell 'User Environment Variables' dialog."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!appConfig.startNewCommand(Command::open))
+            {
+                LOG_ERR<<"Failed to add command to pipeline (--open)"<<"\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.isOption("open-reg") || opt.isOption('r')
+               || opt.setDescription("Command. Opens RegEdit with 'Environment' key opened."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!appConfig.startNewCommand(Command::regOpen))
+            {
+                LOG_ERR<<"Failed to add command to pipeline (--open-reg)"<<"\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
         else if ( opt.setParam("?NAME", std::string())
                || opt.isOption("make-self-alias") || opt.isOption("make-alias") || opt.isOption('A') 
                || opt.setDescription("Command. Creates an alias for this utility. Parameter value is optional, in this case name 'umue' will be used."))
@@ -375,8 +567,14 @@ int operator()( const StringType                                &a           //!
                 return -1;
             }
 
+            if (!appConfig.startNewCommand(Command::makeAlias))
+            {
+                LOG_ERR<<"Failed to add command to pipeline (--make-self-alias)"<<"\n";
+                return -1;
+            }
+
             if (opt.hasArg())
-               appConfig.curCommand.path =opt.optArg;
+               appConfig.curCommand.name = opt.optArg;
             // else
             //    appConfig.aliasName = "umue";
 
@@ -613,16 +811,23 @@ int operator()( const StringType                                &a           //!
 
     // Process non-option args here
 
-    #if 0
-    if (inputFilename.empty())
+    if (!appConfig.isCommandSet())
     {
-        inputFilename = argsParser.makeAbsPath(a);
+        LOG_ERR<<"Value taken but command is not\n";
+        return -1;
     }
-    else
+
+    if (appConfig.isValueSet())
     {
-        outputFilename = argsParser.makeAbsPath(a);
+        LOG_ERR<<"Value already taken"<<"\n";
+        return -1;
     }
-    #endif
+
+    if (!appConfig.setValue(a))
+    {
+        LOG_ERR<<"Value cannot be set to current command\n";
+        return -1;
+    }
 
     return 0;
 

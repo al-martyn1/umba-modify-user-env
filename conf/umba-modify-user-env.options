@@ -1,0 +1,2 @@
+--restrict-var=PATH
+--print-style=list:PATH
